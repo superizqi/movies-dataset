@@ -7,9 +7,6 @@ import plotly.express as px
 # Show the page title and description.
 st.set_page_config(page_title="YouTube Views Tracker", page_icon="🎬")
 st.title("🎬 YouTube Views Tracker")
-st.markdown("""
-    Ever wondered how your favorite YouTube videos perform over time? This dashboard tracks view counts, updated every **2 minutes**! Select a video below and explore the trends! 🚀🎬  
-""")
 
 
 # Initialize connection.
@@ -28,6 +25,12 @@ df = conn.query("""
                     url
                 FROM raw_youtube_data
                 """, ttl="10m")
+
+last_updated = df["data_created_at"].max()
+
+st.markdown(f"""
+    Ever wondered how your favorite YouTube videos perform over time? This dashboard tracks view counts, updated every **2 minutes**! Select a video below and explore the trends! 🚀🎬 Last Updated at {last_updated} 
+""")
 
 # Dropdown for Title Selection
 unique_titles = df["title"].unique()
