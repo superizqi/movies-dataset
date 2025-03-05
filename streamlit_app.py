@@ -11,15 +11,14 @@ conn = st.connection("postgresql", type="sql")
 df = conn.query('SELECT * FROM raw_youtube_data;', ttl="10m")
 
 # Show the page title and description.
-st.set_page_config(page_title="Movies dataset", page_icon="🎬")
-st.title("🎬 Movies dataset")
-st.write(
-    """
-    This app visualizes data from [The Movie Database (TMDB)](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata).
-    It shows which movie genre performed best at the box office over the years. Just 
-    click on the widgets below to explore!  
-    """
-)
+st.set_page_config(page_title="Youtube Monitoring Dashboard", page_icon="🎬")
+st.title("🎬 Youtube Monitoring Dashboard")
+st.markdown("""
+    ### 📊 YouTube Views Tracker  
+    Ever wondered how your favorite YouTube videos perform over time?  
+    This dashboard tracks view counts, updated every **2 minutes**!  
+    Select a video below and explore the trends! 🚀🎬  
+""")
 
 # Dropdown for Title Selection
 unique_titles = df["title"].unique()
@@ -34,6 +33,12 @@ fig = px.line(filtered_df, x="data_created_at", y="views_count",
 
 # Display Chart
 st.plotly_chart(fig)
+
+# Display the data as a table using `st.dataframe`.
+st.dataframe(
+    df,
+    use_container_width=True
+)
 
 # st.title("Select a YouTube Video")
 
