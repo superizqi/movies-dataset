@@ -6,8 +6,8 @@ import plotly.express as px
 
 # Show the page title and description.
 st.set_page_config(page_title="YouTube Views Tracker", page_icon="🎬")
-st.title("🎬 YouTube Views Tracker")
-
+# st.title("🎬 YouTube Views Tracker")
+st.markdown("<h3>🎬 YouTube Views Tracker</h3>", unsafe_allow_html=True)
 
 # Initialize connection.
 conn = st.connection("postgresql", type="sql")
@@ -28,8 +28,8 @@ df = conn.query("""
 
 last_updated = df["data_created_at"].max()
 
-st.markdown(f"🚀 Curious about how a YouTube video performs? See its view trends, updated every **2 minutes**!  
-📅 **Last Updated:** {last_updated}")
+st.markdown(f"""🚀 Curious about how a YouTube video performs? See its view trends, updated every **2 minutes**!  
+📅 **Last Updated:** {last_updated}""")
 
 # Dropdown for Title Selection
 unique_titles = df["title"].unique()
