@@ -8,8 +8,7 @@ import plotly.express as px
 st.set_page_config(page_title="YouTube Views Trackerd", page_icon="🎬")
 st.title("🎬 YouTube Views Tracker")
 st.markdown("""
-    Ever wondered how your favorite YouTube videos perform over time?  
-    This dashboard tracks view counts, updated every **2 minutes**!  
+    Ever wondered how your favorite YouTube videos perform over time? This dashboard tracks view counts, updated every **2 minutes**!  
     Select a video below and explore the trends! 🚀🎬  
 """)
 
@@ -37,23 +36,9 @@ selected_title = st.selectbox("Select a Title", unique_titles)
 # Filter Data based on selected Title
 filtered_df = df[df["title"] == selected_title]
 
-# 🔹 Apply CSS for uniform height
-st.markdown("""
-    <style>
-        .custom-container {
-            height: 50px;  /* Set fixed height */
-            overflow: hidden;  /* Hide overflowing content */
-            display: flex;
-            align-items: center;  /* Center content */
-            justify-content: center;
-        }
-    </style>
-""", unsafe_allow_html=True)
 
 # Display the selected video
-st.markdown('<div class="custom-container">', unsafe_allow_html=True)
 st.video(df[df["title"] == selected_title]['url'].iloc[0])
-st.markdown('</div>', unsafe_allow_html=True)
 
 # 🔹 Row 1: 2 Columns
 with st.container():
