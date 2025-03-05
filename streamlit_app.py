@@ -1,6 +1,7 @@
 import altair as alt
 import pandas as pd
 import streamlit as st
+import plotly.express as px
 
 # import streamlit as st
 
@@ -10,7 +11,7 @@ import streamlit as st
 conn = st.connection("postgresql", type="sql")
 
 # Perform query.
-df = conn.query('SELECT * FROM raw_test;', ttl="10m")
+df = conn.query('SELECT * FROM raw_youtube_data;', ttl="10m")
 
 # Show the page title and description.
 st.set_page_config(page_title="Movies dataset", page_icon="🎬")
@@ -19,26 +20,41 @@ st.write(
     """
     This app visualizes data from [The Movie Database (TMDB)](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata).
     It shows which movie genre performed best at the box office over the years. Just 
-    click on the widgets below to explore!
+    click on the widgets below to explore!  
     """
 )
 
-import streamlit as st
+# Streamlit UI
+# st.title("Views Count Over Time by Title")
+
+# Dropdown for Title Selection
+unique_titles = df["title"].unique()
+selected_title = st.selectbox("Select a Title", unique_titles)
+
+# Filter Data based on selected Title
+filtered_df = df[df["title"] == selected_title]
+
+# Plotly Line Chart
+fig = px.line(filtered_df, x="data_created_at", y="views_count",
+              title=f"Views Count Over Time for {selected_title}")
+
+# Display Chart
+st.plotly_chart(fig)
 
 # st.title("Select a YouTube Video")
 
 # Dictionary of video titles and their corresponding YouTube links
-videos = {
-    "Video 1": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    "Video 2": "https://www.youtube.com/watch?v=3JZ_D3ELwOQ",
-    "Video 3": "https://www.youtube.com/watch?v=2Vv-BfVoq4g"
-}
+# videos = {
+#     "Video 1": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+#     "Video 2": "https://www.youtube.com/watch?v=3JZ_D3ELwOQ",
+#     "Video 3": "https://www.youtube.com/watch?v=2Vv-BfVoq4g"
+# }
 
-# Dropdown to select video
-selected_video = st.selectbox("Choose a video:", list(videos.keys()))
+# # Dropdown to select video
+# selected_video = st.selectbox("Choose a video:", list(videos.keys()))
 
-# Display the selected video
-st.video(videos[selected_video])
+# # Display the selected video
+# st.video(videos[selected_video])
 
 
 # import streamlit as st
