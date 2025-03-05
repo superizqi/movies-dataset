@@ -14,41 +14,49 @@ st.write(
 )
 
 import streamlit as st
-import pandas as pd
-import psycopg2
-from sqlalchemy import create_engine
+# import pandas as pd
+# import psycopg2
+# from sqlalchemy import create_engine
 
-secret_db = st.secrets["postgres"]["SECRET_KEY"]
+# secret_db = st.secrets["postgres"]["SECRET_KEY"]
 
-# Function to get data
-@st.cache_data
-def get_data(query):
-    # Using SQLAlchemy
-    engine = create_engine(secret_db)
-    with engine.connect() as conn:
-        df = pd.read_sql(query, conn)
-    return df
+# # Function to get data
+# @st.cache_data
+# def get_data(query):
+#     # Using SQLAlchemy
+#     engine = create_engine(secret_db)
+#     with engine.connect() as conn:
+#         df = pd.read_sql(query, conn)
+#     return df
 
-# Streamlit UI
-st.title("PostgreSQL Data in Streamlit")
+# # Streamlit UI
+# st.title("PostgreSQL Data in Streamlit")
 
-query = "SELECT * FROM raw_test LIMIT 10"
-df = get_data(query)
+# query = "SELECT * FROM raw_test LIMIT 10"
+# df = get_data(query)
 
-st.write("### Data from PostgreSQL")
-st.dataframe(df)
+# st.write("### Data from PostgreSQL")
+# st.dataframe(df)
 
 
 
 # Load the data from a CSV. We're caching this so it doesn't reload every time the app
 # reruns (e.g. if the user interacts with the widgets).
-# @st.cache_data
-# def load_data():
-#     df = pd.read_csv("data/movies_genres_summary.csv")
-#     return df
+@st.cache_data
+def load_data():
+    df = pd.read_csv("data/movies_genres_summary.csv")
+    return df
 
 
-# df = load_data()
+df = load_data()
+
+# Display the data as a table using `st.dataframe`.
+st.dataframe(
+    df,
+    use_container_width=True,
+    column_config={"year": st.column_config.TextColumn("Year")},
+)
+
 
 # Show a multiselect widget with the genres using `st.multiselect`.
 # genres = st.multiselect(
@@ -68,12 +76,6 @@ st.dataframe(df)
 # df_reshaped = df_reshaped.sort_values(by="year", ascending=False)
 
 
-# Display the data as a table using `st.dataframe`.
-# st.dataframe(
-#     df,
-#     use_container_width=True,
-#     column_config={"year": st.column_config.TextColumn("Year")},
-# )
 
 # Display the data as an Altair chart using `st.altair_chart`.
 # df_chart = pd.melt(
