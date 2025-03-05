@@ -23,10 +23,23 @@ st.write(
     """
 )
 
-st.title("Embed YouTube Video in Streamlit")
+import streamlit as st
 
-# Use the direct YouTube URL
-st.video("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+st.title("Select a YouTube Video")
+
+# Dictionary of video titles and their corresponding YouTube links
+videos = {
+    "Video 1": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "Video 2": "https://www.youtube.com/watch?v=3JZ_D3ELwOQ",
+    "Video 3": "https://www.youtube.com/watch?v=2Vv-BfVoq4g"
+}
+
+# Dropdown to select video
+selected_video = st.selectbox("Choose a video:", list(videos.keys()))
+
+# Display the selected video
+st.video(videos[selected_video])
+
 
 # import streamlit as st
 # import pandas as pd
