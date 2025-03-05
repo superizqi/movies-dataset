@@ -41,8 +41,11 @@ filtered_df = df[df["title"] == selected_title]
 st.markdown("""
     <style>
         .custom-container {
-            height: 100px;  /* Adjust height here */
-            overflow: hidden;
+            height: 50px;  /* Set fixed height */
+            overflow: hidden;  /* Hide overflowing content */
+            display: flex;
+            align-items: center;  /* Center content */
+            justify-content: center;
         }
     </style>
 """, unsafe_allow_html=True)
