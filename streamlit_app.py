@@ -70,25 +70,28 @@ mart_video_summary = fact_video_metrics.groupby("video_id").agg(
 
 # Row 1: Dim Tables
 st.subheader("📁 Dimension Tables")
-row1_col1, row1_col2 = st.columns(2)
-with row1_col1:
-    st.write("🔹 **dim_video**")
-    st.dataframe(dim_video)
+st.write("🔹 **dim_video**")
+st.dataframe(dim_video)
 
-with row1_col2:
-    st.write("🔹 **dim_date**")
-    st.dataframe(dim_date)
+st.write("🔹 **dim_date**")
+st.dataframe(dim_date)
+
+st.subheader("📊 Fact & Mart Tables")
+st.write("📌 **fact_video_metrics**")
+st.dataframe(fact_video_metrics)
+
+st.write("📈 **mart_video_summary**")
+st.dataframe(mart_video_summary)
 
 # Row 2: Fact & Mart Tables
-# st.subheader("📊 Fact & Mart Tables")
+
 # row2_col1, row2_col2 = st.columns(2)
 # with row2_col1:
 #     st.write("📌 **fact_video_metrics**")
 #     st.dataframe(fact_video_metrics)
 
 # with row2_col2:
-#     st.write("📈 **mart_video_summary**")
-#     st.dataframe(mart_video_summary)
+
 
 # Row 3: Visualizations
 # st.subheader("📊 Visualizing YouTube Data")
