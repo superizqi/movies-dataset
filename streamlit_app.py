@@ -37,9 +37,6 @@ selected_title = st.selectbox("Select a Title", unique_titles)
 # Filter Data based on selected Title
 filtered_df = df[df["title"] == selected_title]
 
-# Display the selected video
-st.video(df[df["title"] == selected_title]['url'].iloc[0])
-
 # 🔹 Apply CSS for uniform height
 st.markdown("""
     <style>
@@ -50,25 +47,30 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+# Display the selected video
+st.markdown('<div class="custom-container">', unsafe_allow_html=True)
+st.video(df[df["title"] == selected_title]['url'].iloc[0])
+st.markdown('</div>', unsafe_allow_html=True)
+
 # 🔹 Row 1: 2 Columns
 with st.container():
     col1, col2 = st.columns(2)
 
     with col1:
         st.subheader("📊 Views Over Time")
-        st.markdown('<div class="custom-container">', unsafe_allow_html=True)
+        # st.markdown('<div class="custom-container">', unsafe_allow_html=True)
         # Plotly Line Chart
         fig1 = px.line(filtered_df, x="data_created_at", y="views_count",
                     title=f"Views Count Over Time for {selected_title}")
        # Display Chart
         st.plotly_chart(fig1, use_container_width=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+        # st.markdown('</div>', unsafe_allow_html=True)
 
     with col2:
         st.subheader("❤️ Video")
-        st.markdown('<div class="custom-container">', unsafe_allow_html=True)
+        # st.markdown('<div class="custom-container">', unsafe_allow_html=True)
         st.video(df[df["title"] == selected_title]['url'].iloc[0])
-        st.markdown('</div>', unsafe_allow_html=True)
+        # st.markdown('</div>', unsafe_allow_html=True)
 
 # 🔹 Row 2: 3 Columns
 with st.container():
