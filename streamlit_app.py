@@ -25,7 +25,7 @@ st.write(
 
 import streamlit as st
 
-st.title("Select a YouTube Video")
+# st.title("Select a YouTube Video")
 
 # Dictionary of video titles and their corresponding YouTube links
 videos = {
