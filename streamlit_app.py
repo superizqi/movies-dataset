@@ -23,6 +23,11 @@ st.write(
     """
 )
 
+st.title("Embed YouTube Video in Streamlit")
+
+# Use the direct YouTube URL
+st.video("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+
 # import streamlit as st
 # import pandas as pd
 # import psycopg2
