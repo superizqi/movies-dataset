@@ -43,6 +43,9 @@ st.video(df[df["title"] == selected_title]['url'].iloc[0])
 dim_video = df[['title', 'channel_name', 'upload_date', 'url']].drop_duplicates().reset_index(drop=True)
 dim_video.insert(0, "video_id", range(1, len(dim_video) + 1))
 
+# Ensure data_created_at is in datetime format
+df["data_created_at"] = pd.to_datetime(df["data_created_at"])
+
 # dim_date
 dim_date = df[['data_created_at']].drop_duplicates().reset_index(drop=True)
 dim_date['year'] = dim_date['data_created_at'].dt.year
