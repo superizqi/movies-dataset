@@ -2,6 +2,10 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 
+import streamlit as st
+
+conn = st.experimental_connection('pets_db', type='sql')
+
 # Show the page title and description.
 st.set_page_config(page_title="Movies dataset", page_icon="🎬")
 st.title("🎬 Movies dataset")
@@ -13,7 +17,7 @@ st.write(
     """
 )
 
-import streamlit as st
+# import streamlit as st
 # import pandas as pd
 # import psycopg2
 # from sqlalchemy import create_engine
