@@ -37,30 +37,14 @@ selected_title = st.selectbox("Select a Title", unique_titles)
 # Filter Data based on selected Title
 filtered_df = df[df["title"] == selected_title]
 
-# Display the selected video with custom size
-selected_video_url = df[df["title"] == selected_title]['url'].iloc[0]
-
-st.markdown(
-    f"""
-    <style>
-        .custom-video {{
-            width: 700px;  /* Set Width */
-            height: 400px; /* Set Height */
-        }}
-    </style>
-    <video class="custom-video" controls>
-        <source src="{selected_video_url}" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-    """,
-    unsafe_allow_html=True
-)
+# Display the selected video
+st.video(df[df["title"] == selected_title]['url'].iloc[0])
 
 # 🔹 Apply CSS for uniform height
 st.markdown("""
     <style>
         .custom-container {
-            height: 400px;  /* Adjust height here */
+            height: 100px;  /* Adjust height here */
             overflow: hidden;
         }
     </style>
