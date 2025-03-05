@@ -28,9 +28,8 @@ df = conn.query("""
 
 last_updated = df["data_created_at"].max()
 
-st.markdown(f"""
-    Ever wondered how your favorite YouTube videos perform over time? This dashboard tracks view counts, updated every **2 minutes**! Select a video below and explore the trends! 🚀🎬 Last Updated at {last_updated} 
-""")
+st.markdown(f"🚀 Curious about how a YouTube video performs? See its view trends, updated every **2 minutes**!  
+📅 **Last Updated:** {last_updated}")
 
 # Dropdown for Title Selection
 unique_titles = df["title"].unique()
