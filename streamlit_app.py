@@ -53,6 +53,40 @@ st.dataframe(
 # Display the selected video
 st.video(df[df["title"] == selected_title]['url'].iloc[0])
 
+# 🔹 Row 1: 2 Columns
+with st.container():
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.subheader("📊 Views Over Time")
+        fig1 = px.line(df, x="data_created_at", y="views_count", title="Views Trend")
+        st.plotly_chart(fig1, use_container_width=True)
+
+    with col2:
+        st.subheader("❤️ Likes Over Time")
+        fig2 = px.line(df, x="data_created_at", y="likes_count", title="Likes Trend")
+        st.plotly_chart(fig2, use_container_width=True)
+
+# 🔹 Row 2: 3 Columns
+with st.container():
+    col3, col4, col5 = st.columns(3)
+
+    with col3:
+        st.subheader("💬 Comments Over Time")
+        fig3 = px.line(df, x="data_created_at", y="comments_count", title="Comments Trend")
+        st.plotly_chart(fig3, use_container_width=True)
+
+    with col4:
+        st.subheader("🔁 Shares Over Time")
+        fig4 = px.line(df, x="data_created_at", y="shares_count", title="Shares Trend")
+        st.plotly_chart(fig4, use_container_width=True)
+
+    with col5:
+        st.subheader("🔥 Engagement Rate")
+        df["engagement_rate"] = (df["likes_count"] + df["comments_count"] + df["shares_count"]) / df["views_count"]
+        fig5 = px.line(df, x="data_created_at", y="engagement_rate", title="Engagement Rate Trend")
+        st.plotly_chart(fig5, use_container_width=True)
+        
 # st.title("Select a YouTube Video")
 
 # Dictionary of video titles and their corresponding YouTube links
