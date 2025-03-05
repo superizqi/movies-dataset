@@ -8,11 +8,22 @@ import plotly.express as px
 conn = st.connection("postgresql", type="sql")
 
 # Perform query.
-df = conn.query('SELECT * FROM raw_youtube_data;', ttl="10m")
+df = conn.query("""
+                SELECT 
+                    data_created_at, 
+                    title, 
+                    channel_name, 
+                    views_count, 
+                    likes_count, 
+                    comments_count, 
+                    upload_date,
+                    url
+                FROM raw_youtube_data
+                """, ttl="10m")
 
 # Show the page title and description.
 st.set_page_config(page_title="Youtube Monitoring Dashboard", page_icon="🎬")
-st.title("🎬 Youtube Monitoring Dashboard")
+# st.title("🎬 Youtube Monitoring Dashboard")
 st.markdown("""
     ### 📊 YouTube Views Tracker  
     Ever wondered how your favorite YouTube videos perform over time?  
@@ -36,7 +47,7 @@ st.plotly_chart(fig)
 
 # Display the data as a table using `st.dataframe`.
 st.dataframe(
-    df,
+    df[df["title"] == selected_title],
     use_container_width=True
 )
 
