@@ -5,7 +5,7 @@ import plotly.express as px
 
 
 # Show the page title and description.
-st.set_page_config(page_title="YouTube Views Trackerd", page_icon="🎬")
+st.set_page_config(page_title="YouTube Views Tracker", page_icon="🎬")
 st.title("🎬 YouTube Views Tracker")
 st.markdown("""
     Ever wondered how your favorite YouTube videos perform over time? This dashboard tracks view counts, updated every **2 minutes**! Select a video below and explore the trends! 🚀🎬  
@@ -38,23 +38,6 @@ filtered_df = df[df["title"] == selected_title]
 
 # Display the selected video
 st.video(df[df["title"] == selected_title]['url'].iloc[0])
-
-import streamlit as st
-import pandas as pd
-import plotly.express as px
-
-# Sample DataFrame
-data = {
-    "data_created_at": pd.date_range(start="2024-01-01", periods=10, freq="D"),
-    "title": ["Video A", "Video B", "Video C", "Video A", "Video B", "Video C", "Video A", "Video B", "Video C", "Video A"],
-    "channel_name": ["Channel X"] * 10,
-    "views_count": [100, 200, 150, 300, 250, 400, 350, 450, 500, 600],
-    "likes_count": [10, 20, 15, 30, 25, 40, 35, 45, 50, 60],
-    "comments_count": [5, 10, 7, 15, 12, 20, 18, 22, 25, 30],
-    "upload_date": pd.date_range(start="2023-12-01", periods=10, freq="D"),
-    "url": ["https://www.w3schools.com/html/mov_bbb.mp4"] * 10
-}
-df = pd.DataFrame(data)
 
 ### --- DIM TABLES ---
 # dim_video
