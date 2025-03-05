@@ -4,7 +4,7 @@ import streamlit as st
 
 import streamlit as st
 
-conn = st.experimental_connection('pets_db', type='sql')
+conn = st.connection('pets_db', type='sql')
 
 # Show the page title and description.
 st.set_page_config(page_title="Movies dataset", page_icon="🎬")
