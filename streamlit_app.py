@@ -36,17 +36,31 @@ selected_title = st.selectbox("Select a Title", unique_titles)
 # Filter Data based on selected Title
 filtered_df = df[df["title"] == selected_title]
 
-idvid = str(df[df["title"] == selected_title]['url'].iloc[0]).split("v=")[1]
-video_url = f'https://www.youtube.com/embed/{idvid}'
 
-st.markdown(
-    f"""
-    <iframe width="320" height="180" src="{video_url}" 
-    frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-    </iframe>
-    """,
-    unsafe_allow_html=True
-)
+
+with st.container():
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.subheader("📊 Views Over Time")
+        idvid = str(df[df["title"] == selected_title]['url'].iloc[0]).split("v=")[1]
+        video_url = f'https://www.youtube.com/embed/{idvid}'
+
+        st.markdown(
+            f"""
+            <iframe width="320" height="180" src="{video_url}" 
+            frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+            </iframe>
+            """,
+            unsafe_allow_html=True
+        )
+
+    with col2:
+        st.subheader("❤️ Video")
+        fig1 = px.line(filtered_df, x="data_created_at", y="views_count",
+                    title=f"Views Count Over Time for {selected_title}")
+        st.plotly_chart(fig1, use_container_width=True)
+
 
 
 # Display the selected video
