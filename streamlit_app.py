@@ -11,16 +11,6 @@ st.markdown("""
     Ever wondered how your favorite YouTube videos perform over time? This dashboard tracks view counts, updated every **2 minutes**! Select a video below and explore the trends! 🚀🎬  
 """)
 
-video_url = "https://www.youtube.com/embed/dQw4w9WgXcQ"  # Replace with your video URL
-
-st.markdown(
-    f"""
-    <iframe width="320" height="180" src="{video_url}" 
-    frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-    </iframe>
-    """,
-    unsafe_allow_html=True
-)
 
 # Initialize connection.
 conn = st.connection("postgresql", type="sql")
@@ -46,8 +36,21 @@ selected_title = st.selectbox("Select a Title", unique_titles)
 # Filter Data based on selected Title
 filtered_df = df[df["title"] == selected_title]
 
+idvid = str(df[df["title"] == selected_title]['url'].iloc[0]).split("v=")[1]
+video_url = f'https://www.youtube.com/embed/{idvid}'
+
+st.markdown(
+    f"""
+    <iframe width="320" height="180" src="{video_url}" 
+    frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+    </iframe>
+    """,
+    unsafe_allow_html=True
+)
+
+
 # Display the selected video
-st.video(df[df["title"] == selected_title]['url'].iloc[0])
+# st.video(df[df["title"] == selected_title]['url'].iloc[0])
 
 ### --- DIM TABLES ---
 # dim_video
