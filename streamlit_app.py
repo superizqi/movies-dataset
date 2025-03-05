@@ -4,6 +4,16 @@ import streamlit as st
 import plotly.express as px
 
 
+# Show the page title and description.
+st.set_page_config(page_title="Youtube Monitoring Dashboard", page_icon="🎬")
+st.title("🎬 Youtube Monitoring Dashboard")
+st.markdown("""
+    ### 📊 YouTube Views Tracker  
+    Ever wondered how your favorite YouTube videos perform over time?  
+    This dashboard tracks view counts, updated every **2 minutes**!  
+    Select a video below and explore the trends! 🚀🎬  
+""")
+
 # Initialize connection.
 conn = st.connection("postgresql", type="sql")
 
@@ -20,16 +30,6 @@ df = conn.query("""
                     url
                 FROM raw_youtube_data
                 """, ttl="10m")
-
-# Show the page title and description.
-st.set_page_config(page_title="Youtube Monitoring Dashboard", page_icon="🎬")
-# st.title("🎬 Youtube Monitoring Dashboard")
-st.markdown("""
-    ### 📊 YouTube Views Tracker  
-    Ever wondered how your favorite YouTube videos perform over time?  
-    This dashboard tracks view counts, updated every **2 minutes**!  
-    Select a video below and explore the trends! 🚀🎬  
-""")
 
 # Dropdown for Title Selection
 unique_titles = df["title"].unique()
