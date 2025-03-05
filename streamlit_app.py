@@ -35,7 +35,6 @@ selected_title = st.selectbox("Select a Title", unique_titles)
 # Filter Data based on selected Title
 filtered_df = df[df["title"] == selected_title]
 
-
 # Display the selected video
 st.video(df[df["title"] == selected_title]['url'].iloc[0])
 
@@ -58,13 +57,13 @@ fact_video_metrics = df.merge(dim_video, on=['title', 'channel_name', 'upload_da
 
 ### --- MART TABLE ---
 mart_video_summary = fact_video_metrics.groupby("video_id").agg(
-    total_views=pd.NamedAgg(column="views_count", aggfunc="sum"),
-    total_likes=pd.NamedAgg(column="likes_count", aggfunc="sum"),
-    total_comments=pd.NamedAgg(column="comments_count", aggfunc="sum"),
+    total_views=pd.NamedAgg(column="views_count", aggfunc="max"),
+    total_likes=pd.NamedAgg(column="likes_count", aggfunc="max"),
+    total_comments=pd.NamedAgg(column="comments_count", aggfunc="max"),
 ).reset_index()
 
 ### --- STREAMLIT UI ---
-st.title("📊 YouTube Video Data Warehouse")
+# st.title("📊 YouTube Video Data Warehouse")
 
 # Row 1: Dim Tables
 st.subheader("📁 Dimension Tables")
@@ -78,29 +77,29 @@ with row1_col2:
     st.dataframe(dim_date)
 
 # Row 2: Fact & Mart Tables
-st.subheader("📊 Fact & Mart Tables")
-row2_col1, row2_col2 = st.columns(2)
-with row2_col1:
-    st.write("📌 **fact_video_metrics**")
-    st.dataframe(fact_video_metrics)
+# st.subheader("📊 Fact & Mart Tables")
+# row2_col1, row2_col2 = st.columns(2)
+# with row2_col1:
+#     st.write("📌 **fact_video_metrics**")
+#     st.dataframe(fact_video_metrics)
 
-with row2_col2:
-    st.write("📈 **mart_video_summary**")
-    st.dataframe(mart_video_summary)
+# with row2_col2:
+#     st.write("📈 **mart_video_summary**")
+#     st.dataframe(mart_video_summary)
 
 # Row 3: Visualizations
-st.subheader("📊 Visualizing YouTube Data")
+# st.subheader("📊 Visualizing YouTube Data")
 
-# Line Chart (Views over Time)
-fig_line = px.line(fact_video_metrics.merge(dim_date, on="date_id"),
-                   x="data_created_at", y="views_count", color="video_id",
-                   title="📈 Views Over Time")
-st.plotly_chart(fig_line, use_container_width=True)
+# # Line Chart (Views over Time)
+# fig_line = px.line(fact_video_metrics.merge(dim_date, on="date_id"),
+#                    x="data_created_at", y="views_count", color="video_id",
+#                    title="📈 Views Over Time")
+# st.plotly_chart(fig_line, use_container_width=True)
 
-# Bar Chart (Total Views by Video)
-fig_bar = px.bar(mart_video_summary.merge(dim_video, on="video_id"),
-                 x="title", y="total_views", title="📊 Total Views by Video")
-st.plotly_chart(fig_bar, use_container_width=True)
+# # Bar Chart (Total Views by Video)
+# fig_bar = px.bar(mart_video_summary.merge(dim_video, on="video_id"),
+#                  x="title", y="total_views", title="📊 Total Views by Video")
+# st.plotly_chart(fig_bar, use_container_width=True)
 
 
 # # 🔹 Row 1: 2 Columns
