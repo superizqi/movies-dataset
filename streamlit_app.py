@@ -5,10 +5,9 @@ import plotly.express as px
 
 
 # Show the page title and description.
-st.set_page_config(page_title="Youtube Monitoring Dashboard", page_icon="🎬")
-st.title("🎬 Youtube Monitoring Dashboard")
+st.set_page_config(page_title="YouTube Views Trackerd", page_icon="🎬")
+st.title("🎬 YouTube Views Tracker")
 st.markdown("""
-    ### 📊 YouTube Views Tracker  
     Ever wondered how your favorite YouTube videos perform over time?  
     This dashboard tracks view counts, updated every **2 minutes**!  
     Select a video below and explore the trends! 🚀🎬  
@@ -50,6 +49,9 @@ st.dataframe(
     df[df["title"] == selected_title],
     use_container_width=True
 )
+
+# Display the selected video
+st.video(df[df["title"] == selected_title]['url'].iloc[0])
 
 # st.title("Select a YouTube Video")
 
