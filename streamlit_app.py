@@ -8,8 +8,7 @@ import plotly.express as px
 st.set_page_config(page_title="YouTube Views Trackerd", page_icon="🎬")
 st.title("🎬 YouTube Views Tracker")
 st.markdown("""
-    Ever wondered how your favorite YouTube videos perform over time? This dashboard tracks view counts, updated every **2 minutes**!  
-    Select a video below and explore the trends! 🚀🎬  
+    Ever wondered how your favorite YouTube videos perform over time? This dashboard tracks view counts, updated every **2 minutes**! Select a video below and explore the trends! 🚀🎬  
 """)
 
 # Initialize connection.
@@ -40,44 +39,125 @@ filtered_df = df[df["title"] == selected_title]
 # Display the selected video
 st.video(df[df["title"] == selected_title]['url'].iloc[0])
 
-# 🔹 Row 1: 2 Columns
-with st.container():
-    col1, col2 = st.columns(2)
+import streamlit as st
+import pandas as pd
+import plotly.express as px
 
-    with col1:
-        st.subheader("📊 Views Over Time")
-        # st.markdown('<div class="custom-container">', unsafe_allow_html=True)
-        # Plotly Line Chart
-        fig1 = px.line(filtered_df, x="data_created_at", y="views_count",
-                    title=f"Views Count Over Time for {selected_title}")
-       # Display Chart
-        st.plotly_chart(fig1, use_container_width=True)
-        # st.markdown('</div>', unsafe_allow_html=True)
+# Sample DataFrame
+data = {
+    "data_created_at": pd.date_range(start="2024-01-01", periods=10, freq="D"),
+    "title": ["Video A", "Video B", "Video C", "Video A", "Video B", "Video C", "Video A", "Video B", "Video C", "Video A"],
+    "channel_name": ["Channel X"] * 10,
+    "views_count": [100, 200, 150, 300, 250, 400, 350, 450, 500, 600],
+    "likes_count": [10, 20, 15, 30, 25, 40, 35, 45, 50, 60],
+    "comments_count": [5, 10, 7, 15, 12, 20, 18, 22, 25, 30],
+    "upload_date": pd.date_range(start="2023-12-01", periods=10, freq="D"),
+    "url": ["https://www.w3schools.com/html/mov_bbb.mp4"] * 10
+}
+df = pd.DataFrame(data)
 
-    with col2:
-        st.subheader("❤️ Video")
-        # st.markdown('<div class="custom-container">', unsafe_allow_html=True)
-        st.video(df[df["title"] == selected_title]['url'].iloc[0])
-        # st.markdown('</div>', unsafe_allow_html=True)
+### --- DIM TABLES ---
+# dim_video
+dim_video = df[['title', 'channel_name', 'upload_date', 'url']].drop_duplicates().reset_index(drop=True)
+dim_video.insert(0, "video_id", range(1, len(dim_video) + 1))
 
-# 🔹 Row 2: 3 Columns
-with st.container():
-    col3, col4 = st.columns(2)
+# dim_date
+dim_date = df[['data_created_at']].drop_duplicates().reset_index(drop=True)
+dim_date['year'] = dim_date['data_created_at'].dt.year
+dim_date['month'] = dim_date['data_created_at'].dt.month
+dim_date['day'] = dim_date['data_created_at'].dt.day
+dim_date.insert(0, "date_id", range(1, len(dim_date) + 1))
 
-    with col3:
-        st.subheader("💬 Raw Data")
-        # Display the data as a table using `st.dataframe`.
-        st.dataframe(
-        df[df["title"] == selected_title],
-        use_container_width=True
-        )
+### --- FACT TABLE ---
+fact_video_metrics = df.merge(dim_video, on=['title', 'channel_name', 'upload_date', 'url'], how='left') \
+                       .merge(dim_date, on='data_created_at', how='left') \
+                       [['video_id', 'date_id', 'views_count', 'likes_count', 'comments_count']]
 
-    with col4:
-        st.subheader("🔁 Raw Data")
-        st.dataframe(
-        df[df["title"] == selected_title],
-        use_container_width=True
-        )
+### --- MART TABLE ---
+mart_video_summary = fact_video_metrics.groupby("video_id").agg(
+    total_views=pd.NamedAgg(column="views_count", aggfunc="sum"),
+    total_likes=pd.NamedAgg(column="likes_count", aggfunc="sum"),
+    total_comments=pd.NamedAgg(column="comments_count", aggfunc="sum"),
+).reset_index()
+
+### --- STREAMLIT UI ---
+st.title("📊 YouTube Video Data Warehouse")
+
+# Row 1: Dim Tables
+st.subheader("📁 Dimension Tables")
+row1_col1, row1_col2 = st.columns(2)
+with row1_col1:
+    st.write("🔹 **dim_video**")
+    st.dataframe(dim_video)
+
+with row1_col2:
+    st.write("🔹 **dim_date**")
+    st.dataframe(dim_date)
+
+# Row 2: Fact & Mart Tables
+st.subheader("📊 Fact & Mart Tables")
+row2_col1, row2_col2 = st.columns(2)
+with row2_col1:
+    st.write("📌 **fact_video_metrics**")
+    st.dataframe(fact_video_metrics)
+
+with row2_col2:
+    st.write("📈 **mart_video_summary**")
+    st.dataframe(mart_video_summary)
+
+# Row 3: Visualizations
+st.subheader("📊 Visualizing YouTube Data")
+
+# Line Chart (Views over Time)
+fig_line = px.line(fact_video_metrics.merge(dim_date, on="date_id"),
+                   x="data_created_at", y="views_count", color="video_id",
+                   title="📈 Views Over Time")
+st.plotly_chart(fig_line, use_container_width=True)
+
+# Bar Chart (Total Views by Video)
+fig_bar = px.bar(mart_video_summary.merge(dim_video, on="video_id"),
+                 x="title", y="total_views", title="📊 Total Views by Video")
+st.plotly_chart(fig_bar, use_container_width=True)
+
+
+# # 🔹 Row 1: 2 Columns
+# with st.container():
+#     col1, col2 = st.columns(2)
+
+#     with col1:
+#         st.subheader("📊 Views Over Time")
+#         # st.markdown('<div class="custom-container">', unsafe_allow_html=True)
+#         # Plotly Line Chart
+#         fig1 = px.line(filtered_df, x="data_created_at", y="views_count",
+#                     title=f"Views Count Over Time for {selected_title}")
+#        # Display Chart
+#         st.plotly_chart(fig1, use_container_width=True)
+#         # st.markdown('</div>', unsafe_allow_html=True)
+
+#     with col2:
+#         st.subheader("❤️ Video")
+#         # st.markdown('<div class="custom-container">', unsafe_allow_html=True)
+#         st.video(df[df["title"] == selected_title]['url'].iloc[0])
+#         # st.markdown('</div>', unsafe_allow_html=True)
+
+# # 🔹 Row 2: 3 Columns
+# with st.container():
+#     col3, col4 = st.columns(2)
+
+#     with col3:
+#         st.subheader("💬 Raw Data")
+#         # Display the data as a table using `st.dataframe`.
+#         st.dataframe(
+#         df[df["title"] == selected_title],
+#         use_container_width=True
+#         )
+
+#     with col4:
+#         st.subheader("🔁 Raw Data")
+#         st.dataframe(
+#         df[df["title"] == selected_title],
+#         use_container_width=True
+#         )
 
 
 # st.title("Select a YouTube Video")
