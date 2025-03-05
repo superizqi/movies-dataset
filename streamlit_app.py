@@ -58,7 +58,7 @@ with st.container():
     with col2:
         st.subheader("❤️ Video")
         fig1 = px.line(filtered_df, x="data_created_at", y="views_count",
-                    title=f"Views Count Over Time for {selected_title}")
+                    title=f"Views Count Over Time for {selected_title}", height=180)
         st.plotly_chart(fig1, use_container_width=True)
 
 
