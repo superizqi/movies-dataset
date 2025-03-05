@@ -3,9 +3,6 @@ import pandas as pd
 import streamlit as st
 import plotly.express as px
 
-# import streamlit as st
-
-# conn = st.connection('pets_db', type='sql')
 
 # Initialize connection.
 conn = st.connection("postgresql", type="sql")
@@ -23,9 +20,6 @@ st.write(
     click on the widgets below to explore!  
     """
 )
-
-# Streamlit UI
-# st.title("Views Count Over Time by Title")
 
 # Dropdown for Title Selection
 unique_titles = df["title"].unique()
@@ -95,11 +89,11 @@ st.plotly_chart(fig)
 # df = load_data()
 
 # Display the data as a table using `st.dataframe`.
-st.dataframe(
-    df,
-    use_container_width=True,
-    column_config={"year": st.column_config.TextColumn("Year")},
-)
+# st.dataframe(
+#     df,
+#     use_container_width=True,
+#     column_config={"year": st.column_config.TextColumn("Year")},
+# )
 
 
 # Show a multiselect widget with the genres using `st.multiselect`.
