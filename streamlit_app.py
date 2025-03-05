@@ -37,21 +37,10 @@ selected_title = st.selectbox("Select a Title", unique_titles)
 # Filter Data based on selected Title
 filtered_df = df[df["title"] == selected_title]
 
-# Plotly Line Chart
-fig = px.line(filtered_df, x="data_created_at", y="views_count",
-              title=f"Views Count Over Time for {selected_title}")
 
-# Display Chart
-st.plotly_chart(fig)
-
-# Display the data as a table using `st.dataframe`.
-st.dataframe(
-    df[df["title"] == selected_title],
-    use_container_width=True
-)
 
 # Display the selected video
-st.video(df[df["title"] == selected_title]['url'].iloc[0])
+
 
 # 🔹 Row 1: 2 Columns
 with st.container():
@@ -59,34 +48,37 @@ with st.container():
 
     with col1:
         st.subheader("📊 Views Over Time")
-        fig1 = px.line(df, x="data_created_at", y="views_count", title="Views Trend")
+        
+        # Plotly Line Chart
+        fig1 = px.line(filtered_df, x="data_created_at", y="views_count",
+                    title=f"Views Count Over Time for {selected_title}")
+       # Display Chart
         st.plotly_chart(fig1, use_container_width=True)
 
     with col2:
-        st.subheader("❤️ Likes Over Time")
-        fig2 = px.line(df, x="data_created_at", y="likes_count", title="Likes Trend")
-        st.plotly_chart(fig2, use_container_width=True)
+        st.subheader("❤️ Video")
+        st.video(df[df["title"] == selected_title]['url'].iloc[0])
 
 # 🔹 Row 2: 3 Columns
 with st.container():
-    col3, col4, col5 = st.columns(3)
+    col3, col4 = st.columns(2)
 
     with col3:
-        st.subheader("💬 Comments Over Time")
-        fig3 = px.line(df, x="data_created_at", y="comments_count", title="Comments Trend")
-        st.plotly_chart(fig3, use_container_width=True)
+        st.subheader("💬 Raw Data")
+        # Display the data as a table using `st.dataframe`.
+        st.dataframe(
+        df[df["title"] == selected_title],
+        use_container_width=True
+        )
 
     with col4:
-        st.subheader("🔁 Shares Over Time")
-        fig4 = px.line(df, x="data_created_at", y="shares_count", title="Shares Trend")
-        st.plotly_chart(fig4, use_container_width=True)
+        st.subheader("🔁 Raw Data")
+        st.dataframe(
+        df[df["title"] == selected_title],
+        use_container_width=True
+        )
 
-    with col5:
-        st.subheader("🔥 Engagement Rate")
-        df["engagement_rate"] = (df["likes_count"] + df["comments_count"] + df["shares_count"]) / df["views_count"]
-        fig5 = px.line(df, x="data_created_at", y="engagement_rate", title="Engagement Rate Trend")
-        st.plotly_chart(fig5, use_container_width=True)
-        
+
 # st.title("Select a YouTube Video")
 
 # Dictionary of video titles and their corresponding YouTube links
