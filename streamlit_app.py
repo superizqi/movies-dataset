@@ -10,7 +10,7 @@ import streamlit as st
 conn = st.connection("postgresql", type="sql")
 
 # Perform query.
-df = conn.query('SELECT * FROM mytable;', ttl="10m")
+df = conn.query('SELECT * FROM raw_test;', ttl="10m")
 
 # Show the page title and description.
 st.set_page_config(page_title="Movies dataset", page_icon="🎬")
