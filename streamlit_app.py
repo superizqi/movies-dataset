@@ -28,7 +28,7 @@ df = conn.query("""
 
 last_updated = df["data_created_at"].max()
 
-st.markdown(f"""🚀 Curious about how a YouTube video performs? See its view trends, updated every **2 minutes**!  
+st.markdown(f"""🚀 Curious about how a YouTube video performs? See its view trends, updated every **5 minutes**!  
 📅 **Last Updated:** {last_updated}""")
 
 # Dropdown for Title Selection
